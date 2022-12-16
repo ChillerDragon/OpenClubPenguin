@@ -1,9 +1,11 @@
-const app = require('express')()
+import express = require('express')
+import { Socket } from 'socket.io'
+const app = express()
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const path = require('path')
 
-const { GameController } = require('./src/server/controller/game_controller')
+import GameController from './src/server/controller/game_controller'
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'index.html'))
@@ -17,7 +19,7 @@ app.get('/client/client.js', (req, res) => {
 
 const gameController = new GameController()
 
-io.on('connection', (socket) => {
+io.on('connection', (socket: Socket) => {
   const ipAddr = socket.client.conn.remoteAddress
   const userAgent = socket.handshake.headers['user-agent']
   console.log(`[*] connect ${ipAddr} ${userAgent}`)

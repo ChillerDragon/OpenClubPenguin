@@ -1,10 +1,14 @@
-class GameController {
-  constructor () {
-    this.clients = {}
-    this.pos = 0
-  }
+import { Socket } from "socket.io"
 
-  tick (_this) {
+interface ClientList {
+  [index: string]: Socket
+}
+
+class GameController {
+  pos: number = 0
+  clients: ClientList = {}
+
+  tick (_this: GameController) {
     console.log(`[controller] game tick yo pos=${_this.pos} clients=${Object.keys(_this.clients).length}`)
     _this.pos += 2
     if (_this.pos > 100) {
@@ -16,15 +20,15 @@ class GameController {
     }
   }
 
-  join (socket) {
+  join (socket: Socket) {
     console.log('[controller] someone joined')
     this.clients[socket.id] = socket
   }
 
-  leave (socket) {
+  leave (socket: Socket) {
     console.log('[controller] someone left')
     delete this.clients[socket.id]
   }
 }
 
-module.exports = { GameController }
+export default GameController
