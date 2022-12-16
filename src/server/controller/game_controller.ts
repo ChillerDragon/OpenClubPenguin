@@ -41,7 +41,24 @@ class GameController {
     this.players[socket.id] = player
     socket.emit('startinfo', {
       clientId: player.id,
-      world: { w: this.world.width, h: this.world.height }
+      world: {
+        w: this.world.width,
+        h: this.world.height,
+        platforms: [
+          {
+            x: 10,
+            y: 10,
+            w: 100,
+            h: 100,
+          },
+          {
+            x: 140,
+            y: 120,
+            w: 10,
+            h: 50,
+          }
+        ]
+      }
     })
   }
 

@@ -12,6 +12,8 @@ var ownPlayer = {}
 var worldHeight = 10
 var worldWidth = 10
 
+var platforms = []
+
 function centerAroundPos(pos) {
   if (!pos) {
     return {x: 0, y: 0}
@@ -27,6 +29,7 @@ socket.on('startinfo', function(startinfo) {
   ownId = startinfo.clientId
   worldHeight = startinfo.world.h
   worldWidth = startinfo.world.w
+  platforms = startinfo.world.platforms
 })
 
 socket.on('update', function(updateData) {
@@ -42,13 +45,23 @@ socket.on('update', function(updateData) {
   }
   // x = data
   // fill background
-  context.fillStyle = "white";
+  context.fillStyle = "blue";
   context.fillRect(0, 0, 400, 250);
 
+  // get camera position
   if (ownId) {
     ownPlayer = players[ownId]
   }
   var offset = centerAroundPos(ownPlayer)
+
+  // draw world
+  if (platforms) {
+    context.fillStyle = "white";
+    for(var i = 0; i < platforms.length; i++) {
+      var plat = platforms[i]
+      context.fillRect(plat.x + offset.x, plat.y + offset.y, plat.h, plat.w);
+    }
+  }
 
   // draw players
   context.fillStyle = "black";
