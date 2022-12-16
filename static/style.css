@@ -8,3 +8,16 @@ html, body {
 canvas {
     display: block;
 }
+
+.username-container {
+    position: relative;
+}
+
+form {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+}

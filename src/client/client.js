@@ -28,11 +28,22 @@ function centerAroundPos(pos) {
   return {x: x, y: y}
 }
 
+socket.on('connect', function() {
+  console.log('Successfully connected!');
+})
+
 socket.on('startinfo', function(startinfo) {
   ownId = startinfo.clientId
   worldHeight = startinfo.world.h
   worldWidth = startinfo.world.w
   platforms = startinfo.world.platforms
+})
+
+socket.on('playerinfo', function(playerInfos) {
+  for(var i = 0; i < playerInfos.length; i++) {
+    var info = playerInfos[i]
+    players[info.id].username = info.username
+  }
 })
 
 socket.on('update', function(updateData) {
@@ -43,7 +54,7 @@ socket.on('update', function(updateData) {
       players[id].x = pos.x
       players[id].y = pos.y
     } else { // new player
-      players[id] = {x: pos.x, y: pos.y}
+      players[id] = {x: pos.x, y: pos.y, username: ''}
     }
   }
   // x = data
@@ -68,8 +79,13 @@ socket.on('update', function(updateData) {
 
   // draw players
   context.fillStyle = 'black';
-  for (let [_id, pos] of Object.entries(players)) {
-    context.drawImage(playerImg, pos.x + offset.x, pos.y + offset.y, 64, 64)
+  for (let [id, pos] of Object.entries(players)) {
+    var player = players[id]
+    player.x = pos.x
+    player.y = pos.y
+    context.drawImage(playerImg, player.x + offset.x, player.y + offset.y, 64, 64)
+    context.textAlign = 'center'
+    context.fillText(player.username, player.x + offset.x + 32, player.y + offset.y - 10); 
   }
 });
 
@@ -98,3 +114,12 @@ function resize() {
 
 window.addEventListener('resize', resize)
 resize()
+
+var form = document.querySelector('form')
+var usernameBox = document.querySelector('#username')
+var usernameContainer = document.querySelector('.username-container')
+form.addEventListener('submit', function(event) {
+  event.preventDefault()
+  socket.emit('username', usernameBox.value)
+  // usernameContainer.style.display = 'none'
+})

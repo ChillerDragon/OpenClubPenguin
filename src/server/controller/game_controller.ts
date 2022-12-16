@@ -34,7 +34,7 @@ class GameController {
     }
   }
 
-  join (socket: Socket) {
+  onJoin (socket: Socket) {
     this.currentPlayerId += 1
     const player = new Player(socket, this.currentPlayerId)
     console.log(`[controller] id=${player.id} joined`)
@@ -49,12 +49,35 @@ class GameController {
     })
   }
 
-  leave (socket: Socket) {
+  onLeave (socket: Socket) {
     console.log(`[controller] id=${this.players[socket.id].id} left`)
     delete this.players[socket.id]
   }
-  
-  move (socket: Socket, dir: string) {
+
+  sendPlayerinfo () {
+    // build username data
+    const playerData: Array<object> = []
+    for (const playerId in this.players) {
+      const player = this.players[playerId]
+      playerData.push({id: player.id, username: player.username})
+    }
+    // send pos data to all clients
+    for (const playerId in this.players) {
+      const player = this.players[playerId]
+      player.socket.emit('playerinfo', playerData)
+    }
+  }
+
+  onUsername (socket: Socket, name: string) {
+    const player = this.players[socket.id]
+    name = name.slice(0, 32)
+    name = name.replace(/[^a-zA-Z0-9]/g, '_')
+    console.log(`[controller] id=${player.id} set username '${name}'`)
+    player.username = name
+    this.sendPlayerinfo()
+  }
+
+  onMove (socket: Socket, dir: string) {
     const player = this.players[socket.id]
     console.log(`[controller] id=${player.id} moved '${dir}'`)
     const moveSpeed: number = 10

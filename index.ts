@@ -23,22 +23,26 @@ io.on('connection', (socket: Socket) => {
   const ipAddr = socket.client.conn.remoteAddress
   const userAgent = socket.handshake.headers['user-agent']
   console.log(`[*] connect ${ipAddr} ${userAgent}`)
-  gameController.join(socket)
+  gameController.onJoin(socket)
 
   socket.on('disconnect', () => {
     console.log(`[*] disconnect ${ipAddr} ${userAgent}`)
-    gameController.leave(socket)
+    gameController.onLeave(socket)
   })
 
   socket.on('move', (dir: string) => {
-    gameController.move(socket, dir)
+    gameController.onMove(socket, dir)
+  })
+
+  socket.on('username', (name: string) => {
+    gameController.onUsername(socket, name)
   })
 })
 
 app.use(express.static('static'))
 
-http.listen(3000, () => {
-  console.log('[*] listening on http://localhost:3000')
+http.listen(6827, () => {
+  console.log('[*] listening on http://localhost:6827')
 })
 
 setInterval(gameController.tick, 100, gameController)
