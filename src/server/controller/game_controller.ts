@@ -71,16 +71,16 @@ class GameController {
 
     // TODO: better clamping
     if (this.players[socket.id].x > this.world.width) {
-      this.players[socket.id].x = 0
+      this.players[socket.id].x = this.world.width
     }
     if (this.players[socket.id].x < 0) {
-      this.players[socket.id].x = 100
+      this.players[socket.id].x = 0
     }
     if (this.players[socket.id].y > this.world.height) {
-      this.players[socket.id].y = 0
+      this.players[socket.id].y = this.world.height
     }
     if (this.players[socket.id].y < 0) {
-      this.players[socket.id].y = 100
+      this.players[socket.id].y = 0
     }
   }
 }
