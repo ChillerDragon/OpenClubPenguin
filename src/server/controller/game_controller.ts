@@ -54,8 +54,8 @@ class GameController {
           {
             x: 140,
             y: 120,
-            w: 10,
-            h: 50,
+            w: 128,
+            h: 60,
           }
         ]
       }

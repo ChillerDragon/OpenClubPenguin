@@ -62,7 +62,7 @@ socket.on('update', function(updateData) {
     context.fillStyle = "white";
     for(var i = 0; i < platforms.length; i++) {
       var plat = platforms[i]
-      context.fillRect(plat.x + offset.x, plat.y + offset.y, plat.h, plat.w);
+      context.fillRect(plat.x + offset.x, plat.y + offset.y, plat.w, plat.h);
     }
   }
 
