@@ -47,6 +47,7 @@ class GameController {
         platforms: this.world.platforms
       }
     })
+    this.sendPlayerInfo(socket)
   }
 
   onLeave (socket: Socket) {
@@ -54,17 +55,27 @@ class GameController {
     delete this.players[socket.id]
   }
 
-  sendPlayerinfo () {
+  buildPlayerInfo () {
     // build username data
     const playerData: Array<object> = []
     for (const playerId in this.players) {
       const player = this.players[playerId]
       playerData.push({id: player.id, username: player.username})
     }
+    return playerData
+  }
+
+  sendPlayerInfo (socket: Socket) {
+    const playerInfos = this.buildPlayerInfo()
+    console.log(`[controller] send to=${socket.id} infos=${playerInfos}`)
+    socket.emit('playerinfos', playerInfos)
+  }
+
+  sendPlayerInfoAll () {
     // send pos data to all clients
     for (const playerId in this.players) {
       const player = this.players[playerId]
-      player.socket.emit('playerinfo', playerData)
+      this.sendPlayerInfo(player.socket)
     }
   }
 
@@ -74,7 +85,7 @@ class GameController {
     name = name.replace(/[^a-zA-Z0-9]/g, '_')
     console.log(`[controller] id=${player.id} set username '${name}'`)
     player.username = name
-    this.sendPlayerinfo()
+    this.sendPlayerInfoAll()
   }
 
   onMove (socket: Socket, dir: string) {

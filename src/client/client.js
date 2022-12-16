@@ -39,10 +39,14 @@ socket.on('startinfo', function(startinfo) {
   platforms = startinfo.world.platforms
 })
 
-socket.on('playerinfo', function(playerInfos) {
+socket.on('playerinfos', function(playerInfos) {
   for(var i = 0; i < playerInfos.length; i++) {
     var info = playerInfos[i]
-    players[info.id].username = info.username
+    if (players[info.id]) { // update player
+      players[info.id].username = info.username
+    } else { // new player
+      players[info.id] = {x: 0, y: 0, username: info.username }
+    }
   }
 })
 
