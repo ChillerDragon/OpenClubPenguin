@@ -8,13 +8,13 @@ const path = require('path')
 import GameController from './src/server/controller/game_controller'
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'index.html'))
+  res.sendFile(path.resolve(__dirname, '../index.html'))
 })
 
 // TODO: use webpacker or another file server
 //       to properly polyfill and minify
 app.get('/client/client.js', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'src/client/client.js'))
+  res.sendFile(path.resolve(__dirname, '../src/client/client.js'))
 })
 
 const gameController = new GameController()
@@ -29,9 +29,10 @@ io.on('connection', (socket: Socket) => {
     console.log(`[*] disconnect ${ipAddr} ${userAgent}`)
     gameController.leave(socket)
   })
-  setTimeout(function () {
-    socket.send('Sent a message 4seconds after connection!')
-  }, 4000)
+
+  socket.on('move', (dir: string) => {
+    gameController.move(socket, dir)
+  })
 })
 
 http.listen(3000, () => {
