@@ -8,9 +8,20 @@
 </head>
 <body>
     <script src="/socket.io/socket.io.js"></script>
+    socket stuff
+    <canvas width="400" height="250" style="border:2px solid #000000;"></canvas>
     <script>
         var socket = io();
-     </script>
-     socket stuff
+        var context = document.querySelector("canvas").getContext("2d");
+        var x = 0
+        socket.on('pos', function(data) {
+            console.log(data)
+            x = data
+            context.fillStyle = "white";
+            context.fillRect(0, 0, 400, 250);
+            context.fillStyle = "black";
+            context.fillRect(x,0,250,120);
+        });
+    </script>
 </body>
 </html>
