@@ -49,7 +49,7 @@ socket.on('update', function(updateData) {
   // x = data
   // fill background
   context.fillStyle = "blue";
-  context.fillRect(0, 0, 400, 250);
+  context.fillRect(0, 0, context.canvas.width, context.canvas.height)
 
   // get camera position
   if (ownId) {
@@ -92,3 +92,27 @@ function keyPress(event) {
 }
 
 window.addEventListener('keydown', keyPress);
+
+function resizeCanvas(width, height, heightWidthRatio) {
+  if (height / width > heightWidthRatio) {
+    context.canvas.height = width * heightWidthRatio
+    context.canvas.width = width
+  } else {
+    context.canvas.height = height
+    context.canvas.width = height / heightWidthRatio
+  }
+  context.imageSmoothingEnabled = false
+}
+
+var WIDTH = 16
+var HEIGHT = 9
+
+function canvasFitWindow() {
+  resizeCanvas(document.documentElement.clientWidth - 32, document.documentElement.clientHeight - 32, HEIGHT / WIDTH)
+}
+
+canvasFitWindow()
+
+window.addEventListener('resize', function() {
+  canvasFitWindow()
+})
