@@ -20,7 +20,7 @@ class GameController {
   world: World = new World(1024, 1024)
 
   tick (_this: GameController) {
-    console.log(`[controller] game tick yo pos=${_this.pos} players=${Object.keys(_this.players).length}`)
+    // console.log(`[controller] game tick players=${Object.keys(_this.players).length}`)
     // build pos data
     const posData: PlayerPosList = {}
     for (const playerId in _this.players) {
@@ -35,9 +35,9 @@ class GameController {
   }
 
   join (socket: Socket) {
-    console.log('[controller] someone joined')
     this.currentPlayerId += 1
     const player = new Player(socket, this.currentPlayerId)
+    console.log(`[controller] id=${player.id} joined`)
     this.players[socket.id] = player
     socket.emit('startinfo', {
       clientId: player.id,
@@ -50,37 +50,38 @@ class GameController {
   }
 
   leave (socket: Socket) {
-    console.log('[controller] someone left')
+    console.log(`[controller] id=${this.players[socket.id].id} left`)
     delete this.players[socket.id]
   }
   
   move (socket: Socket, dir: string) {
-    console.log(`[controller] someone moved ${dir}`)
+    const player = this.players[socket.id]
+    console.log(`[controller] id=${player.id} moved '${dir}'`)
     const moveSpeed: number = 10
     if (dir === 'left') {
-      this.players[socket.id].x -= moveSpeed
+      player.x -= moveSpeed
     } else if (dir === 'right') {
-      this.players[socket.id].x += moveSpeed
+      player.x += moveSpeed
     } else if (dir === 'up') {
-      this.players[socket.id].y -= moveSpeed
+      player.y -= moveSpeed
     } else if (dir === 'down') {
-      this.players[socket.id].y += moveSpeed
+      player.y += moveSpeed
     } else {
-      console.log(`[controller] illegal direction ${dir}`)
+      console.log(`[controller] illegal direction '${dir}'`)
     }
 
     // TODO: better clamping
-    if (this.players[socket.id].x > this.world.width) {
-      this.players[socket.id].x = this.world.width
+    if (player.x > this.world.width) {
+      player.x = this.world.width
     }
-    if (this.players[socket.id].x < 0) {
-      this.players[socket.id].x = 0
+    if (player.x < 0) {
+      player.x = 0
     }
-    if (this.players[socket.id].y > this.world.height) {
-      this.players[socket.id].y = this.world.height
+    if (player.y > this.world.height) {
+      player.y = this.world.height
     }
-    if (this.players[socket.id].y < 0) {
-      this.players[socket.id].y = 0
+    if (player.y < 0) {
+      player.y = 0
     }
   }
 }

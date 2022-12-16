@@ -3,7 +3,7 @@
 // TODO: use es6 and polyfill with webpack
 
 var socket = io();
-var context = document.querySelector("canvas").getContext("2d");
+var context = document.querySelector('canvas').getContext('2d');
 var x = 0
 
 var players = {}
@@ -15,7 +15,7 @@ var worldWidth = 10
 var platforms = []
 
 var playerImg = new Image()
-playerImg.src = "/img/penguin.svg"
+playerImg.src = '/img/penguin.svg'
 
 function centerAroundPos(pos) {
   if (!pos) {
@@ -38,7 +38,7 @@ socket.on('startinfo', function(startinfo) {
 socket.on('update', function(updateData) {
   var newPositions = updateData.positions
   for (let [id, pos] of Object.entries(newPositions)) {
-    console.log(`id=${id} x=${pos.x} y=${pos.y}`)
+    // console.log(`id=${id} x=${pos.x} y=${pos.y}`)
     if (players[id]) { // update player
       players[id].x = pos.x
       players[id].y = pos.y
@@ -48,7 +48,7 @@ socket.on('update', function(updateData) {
   }
   // x = data
   // fill background
-  context.fillStyle = "blue";
+  context.fillStyle = 'blue';
   context.fillRect(0, 0, context.canvas.width, context.canvas.height)
 
   // get camera position
@@ -59,7 +59,7 @@ socket.on('update', function(updateData) {
 
   // draw world
   if (platforms) {
-    context.fillStyle = "white";
+    context.fillStyle = 'white';
     for(var i = 0; i < platforms.length; i++) {
       var plat = platforms[i]
       context.fillRect(plat.x + offset.x, plat.y + offset.y, plat.w, plat.h);
@@ -67,9 +67,8 @@ socket.on('update', function(updateData) {
   }
 
   // draw players
-  context.fillStyle = "black";
-  for (let [id, pos] of Object.entries(players)) {
-    // context.fillRect(pos.x + offset.x, pos.y + offset.y, 10, 10);
+  context.fillStyle = 'black';
+  for (let [_id, pos] of Object.entries(players)) {
     context.drawImage(playerImg, pos.x + offset.x, pos.y + offset.y, 64, 64)
   }
 });
@@ -78,7 +77,6 @@ function keyPress(event) {
   var key = event.key
   if(key === 'a') {
     socket.emit('move', 'left')
-    console.log('emit shit')
   }
   if(key === 'd') {
     socket.emit('move', 'right')
