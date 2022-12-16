@@ -3,10 +3,16 @@ const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const path = require('path')
 
-const { GameController } = require('./src/controller/game_controller')
+const { GameController } = require('./src/server/controller/game_controller')
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'index.html'))
+})
+
+// TODO: use webpacker or another file server
+//       to properly polyfill and minify
+app.get('/client/client.js', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'src/client/client.js'))
 })
 
 const gameController = new GameController()
