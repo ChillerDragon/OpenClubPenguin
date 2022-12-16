@@ -35,6 +35,8 @@ io.on('connection', (socket: Socket) => {
   })
 })
 
+app.use(express.static('static'))
+
 http.listen(3000, () => {
   console.log('[*] listening on http://localhost:3000')
 })

@@ -14,6 +14,9 @@ var worldWidth = 10
 
 var platforms = []
 
+var playerImg = new Image()
+playerImg.src = "/img/penguin.svg"
+
 function centerAroundPos(pos) {
   if (!pos) {
     return {x: 0, y: 0}
@@ -66,7 +69,8 @@ socket.on('update', function(updateData) {
   // draw players
   context.fillStyle = "black";
   for (let [id, pos] of Object.entries(players)) {
-    context.fillRect(pos.x + offset.x, pos.y + offset.y, 10, 10);
+    // context.fillRect(pos.x + offset.x, pos.y + offset.y, 10, 10);
+    context.drawImage(playerImg, pos.x + offset.x, pos.y + offset.y, 64, 64)
   }
 });
 
