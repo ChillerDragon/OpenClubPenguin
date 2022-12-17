@@ -1,7 +1,10 @@
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 import Pos from "../../shared/pos"
 import Platform from "../../shared/platform"
+import StartInfo from "../../shared/messages/startinfo";
+
+import { ServerToClientEvents, ClientToServerEvents } from "../../shared/socket.io"
 
 interface SimplePlayer {
   x: number
@@ -17,7 +20,7 @@ interface UpdateData {
   positions: PlayerPosList
 }
 
-const socket = io();
+const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 const context = document.querySelector('canvas')!.getContext('2d');
 
 const players: PlayerPosList = {}
@@ -46,7 +49,7 @@ socket.on('connect', function() {
   console.log('Successfully connected!');
 })
 
-socket.on('startinfo', function(startinfo) {
+socket.on('startinfo', (startinfo: StartInfo) => {
   ownId = startinfo.clientId
   worldHeight = startinfo.world.h
   worldWidth = startinfo.world.w
