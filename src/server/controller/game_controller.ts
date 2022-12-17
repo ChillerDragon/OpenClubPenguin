@@ -91,7 +91,7 @@ class GameController {
 
   onMove (socket: Socket, dir: string) {
     const player = this.players[socket.id]
-    console.log(`[controller] id=${player.id} moved '${dir}'`)
+    // console.log(`[controller] id=${player.id} moved '${dir}'`)
     const moveSpeed: number = 10
     if (dir === 'left') {
       player.x -= moveSpeed
