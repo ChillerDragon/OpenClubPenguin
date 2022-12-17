@@ -1,22 +1,12 @@
 import { io } from "socket.io-client";
 
-// share those types between client and server
-interface Pos {
-  x: number
-  y: number
-}
+import Pos from "../../shared/pos"
+import Platform from "../../shared/platform"
 
 interface SimplePlayer {
   x: number
   y: number
   username: string
-}
-
-interface Platform {
-  x: number
-  y: number
-  w: number
-  h: number
 }
 
 interface PlayerPosList {

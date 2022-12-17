@@ -1,15 +1,12 @@
 import { Socket } from "socket.io"
 import Player from "../models/player"
 import World from "../models/world"
+import Pos from "../../shared/pos"
 
 interface PlayerList {
   [index: string]: Player
 }
 
-interface Pos {
-  x: number
-  y: number
-}
 interface PlayerPosList {
   [index: number]: Pos
 }
