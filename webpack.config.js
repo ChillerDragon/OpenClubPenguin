@@ -13,6 +13,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist/client')
   },
+  devtool: 'source-map', // TODO: use https://webpack.js.org/loaders/source-map-loader/
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/client/index.html'

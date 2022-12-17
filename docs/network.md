@@ -11,16 +11,16 @@
      |                                |                          |
      |                                |                          |
      |------ websocket connect ------>|                          |
-     |<----- <a href="../src/shared/messages/startinfo.ts">startinfo</a> ---------------|----- playerinfos ------->|
+     |<----- <a href="../src/shared/messages/server/startinfo.ts">startinfo</a> ---------------|----- <a href="../src/shared/messages/server/playerinfos.ts">playerinfos</a> ------->|
      |                                |                          |
      |                                |                          |
-     |                                |----- update ------------>|
+     |                                |----- <a href="../src/shared/messages/server/update.ts">update</a> ------------>|
      |                                |   (fixed interval)       |
      |                                |                          |
-     |------ move ------------------->|                          |
+     |------ <a href="../src/shared/messages/client/move.ts">move</a> ------------------->|                          |
      |    (on user input)             |                          |
      |                                |                          |
-     |------ username --------------->|----- playerinfos ------->|
+     |------ <a href="../src/shared/messages/client/username.ts">username</a> --------------->|----- <a href="../src/shared/messages/server/playerinfos.ts">playerinfos</a> ------->|
      |                                |                          |
      |                                |                          |
      |------ websocket disconnect --->|                          |

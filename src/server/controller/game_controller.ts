@@ -2,13 +2,12 @@ import { Socket } from "socket.io"
 import Player from "../models/player"
 import World from "../models/world"
 import Pos from "../../shared/pos"
+import PlayerInfo from "../../shared/messages/server/playerinfo"
+import PlayerPos from "../../shared/playerpos"
+import MsgUpdate from "../../shared/messages/server/update"
 
 interface PlayerList {
   [index: string]: Player
-}
-
-interface PlayerPosList {
-  [index: number]: Pos
 }
 
 class GameController {
@@ -20,15 +19,22 @@ class GameController {
   tick (_this: GameController) {
     // console.log(`[controller] game tick players=${Object.keys(_this.players).length}`)
     // build pos data
-    const posData: PlayerPosList = {}
+    const positions: Array<PlayerPos> = []
     for (const playerId in _this.players) {
       const player = _this.players[playerId]
-      posData[player.id] = {x: player.x, y: player.y}
+      positions.push({
+        id: player.id,
+        x: player.x,
+        y: player.y
+      })
     }
     // send pos data to all clients
+    const msgUpdate: MsgUpdate = {
+      positions: positions
+    }
     for (const playerId in _this.players) {
       const player = _this.players[playerId]
-      player.socket.emit('update', {positions: posData})
+      player.socket.emit('update', msgUpdate)
     }
   }
 
@@ -53,9 +59,9 @@ class GameController {
     delete this.players[socket.id]
   }
 
-  buildPlayerInfo () {
+  buildPlayerInfo (): Array<PlayerInfo> {
     // build username data
-    const playerData: Array<object> = []
+    const playerData: Array<PlayerInfo> = []
     for (const playerId in this.players) {
       const player = this.players[playerId]
       playerData.push({id: player.id, username: player.username})

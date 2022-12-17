@@ -1,21 +1,14 @@
-import StartInfo from "./messages/startinfo";
+import StartInfo from "./messages/client/startinfo";
+import PlayerInfo from "./messages/server/playerinfo";
+import MsgUpdate from "./messages/server/update";
 
 export interface ServerToClientEvents {
-    startinfo: (startinfo: StartInfo) => void;
-    noArg: () => void;
-    basicEmit: (a: number, b: string, c: Buffer) => void;
-    withAck: (d: string, callback: (e: number) => void) => void;
+    startinfo: (startinfo: StartInfo) => void
+    playerinfos: (playerinfos: Array<PlayerInfo>) => void
+    update: (updateData: MsgUpdate) => void
 }
 
 export interface ClientToServerEvents {
-    hello: () => void;
-}
-
-export interface InterServerEvents {
-    ping: () => void;
-}
-
-export interface SocketData {
-    name: string;
-    age: number;
+    move: (direction: string) => void
+    username: (name: string) => void
 }

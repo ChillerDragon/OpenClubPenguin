@@ -2,9 +2,12 @@ import { io, Socket } from "socket.io-client";
 
 import Pos from "../../shared/pos"
 import Platform from "../../shared/platform"
-import StartInfo from "../../shared/messages/startinfo";
+import StartInfo from "../../shared/messages/client/startinfo";
 
 import { ServerToClientEvents, ClientToServerEvents } from "../../shared/socket.io"
+import PlayerInfo from "../../shared/messages/server/playerinfo";
+import MsgUpdate from "../../shared/messages/server/update";
+import PlayerPos from "../../shared/playerpos";
 
 interface SimplePlayer {
   x: number
@@ -56,7 +59,7 @@ socket.on('startinfo', (startinfo: StartInfo) => {
   platforms = startinfo.world.platforms
 })
 
-socket.on('playerinfos', function(playerInfos) {
+socket.on('playerinfos', (playerInfos: Array<PlayerInfo>) => {
   for(var i = 0; i < playerInfos.length; i++) {
     var info = playerInfos[i]
     if (players[info.id]) { // update player
@@ -67,15 +70,14 @@ socket.on('playerinfos', function(playerInfos) {
   }
 })
 
-socket.on('update', function(updateData: UpdateData) {
-  const newPositions: PlayerPosList = updateData.positions
-  for (const id in newPositions) {
-    const newPos = newPositions[id]
-    if (players[id]) { // update player
-      players[id].x = newPos.x
-      players[id].y = newPos.y
+socket.on('update', (updateData: MsgUpdate) => {
+  const newPositions: Array<PlayerPos> = updateData.positions
+  for (const newPos of newPositions) {
+    if (players[newPos.id]) { // update player
+      players[newPos.id].x = newPos.x
+      players[newPos.id].y = newPos.y
     } else { // new player
-      players[id] = {x: newPos.x, y: newPos.y, username: ''}
+      players[newPos.id] = {x: newPos.x, y: newPos.y, username: ''}
     }
   }
   // fill background
@@ -99,11 +101,10 @@ socket.on('update', function(updateData: UpdateData) {
 
   // draw players
   context!.fillStyle = 'black';
-  for (const id in newPositions) {
-    const pos = newPositions[id]
-    var player = players[id]
-    player.x = pos.x
-    player.y = pos.y
+  for (const newPos of newPositions) {
+    var player = players[newPos.id]
+    player.x = newPos.x
+    player.y = newPos.y
     context!.drawImage(playerImg, player.x + offset.x, player.y + offset.y, 64, 64)
     context!.textAlign = 'center'
     context!.fillText(player.username, player.x + offset.x + 32, player.y + offset.y - 10); 
