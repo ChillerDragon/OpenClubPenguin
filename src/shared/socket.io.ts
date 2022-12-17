@@ -1,4 +1,4 @@
-import StartInfo from "./messages/client/startinfo";
+import StartInfo from "./messages/server/startinfo";
 import PlayerInfo from "./messages/server/playerinfo";
 import MsgUpdate from "./messages/server/update";
 

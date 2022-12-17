@@ -2,7 +2,7 @@ import { io, Socket } from "socket.io-client";
 
 import Pos from "../../shared/pos"
 import Platform from "../../shared/platform"
-import StartInfo from "../../shared/messages/client/startinfo";
+import StartInfo from "../../shared/messages/server/startinfo";
 
 import { ServerToClientEvents, ClientToServerEvents } from "../../shared/socket.io"
 import PlayerInfo from "../../shared/messages/server/playerinfo";
