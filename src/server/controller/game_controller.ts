@@ -7,7 +7,8 @@ interface PlayerList {
 }
 
 interface Pos {
-  [index: string]: number
+  x: number
+  y: number
 }
 interface PlayerPosList {
   [index: number]: Pos

@@ -7,9 +7,9 @@ const path = require('path')
 
 import GameController from './src/server/controller/game_controller'
 
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../index.html'))
-})
+// app.get('/', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../index.html'))
+// })
 
 // TODO: use webpacker or another file server
 //       to properly polyfill and minify
@@ -39,7 +39,7 @@ io.on('connection', (socket: Socket) => {
   })
 })
 
-app.use(express.static('static'))
+app.use(express.static('dist'))
 
 http.listen(6827, () => {
   console.log('[*] listening on http://localhost:6827')

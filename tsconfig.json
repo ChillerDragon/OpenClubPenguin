@@ -3,11 +3,10 @@
     "display": "Node 16",
     
     "compilerOptions": {
-        "lib": ["es2021"],
+        "lib": ["es2021", "DOM"],
         "module": "commonjs",
 	"outDir": "dist",
         "target": "es2021",
-        
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
