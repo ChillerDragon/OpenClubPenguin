@@ -10,13 +10,8 @@ RUN npm install --production
 
 COPY . .
 
-# build front end
-RUN npx webpack build
+RUN npm run build
 
-# build backend
-RUN npx tsc
-
-# run backend / serve frontend
-CMD [ "node", "dist/server/server/server.js" ]
+CMD [ "node", "dist/server/server.js" ]
 
 EXPOSE 6827

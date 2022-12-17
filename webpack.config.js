@@ -33,7 +33,10 @@ const config = {
       {
         test: /\.(ts|tsx)$/i,
         loader: 'ts-loader',
-        exclude: ['/node_modules/', '/src/server/']
+        options: {
+          configFile: 'tsconfig.client.json'
+        },
+        exclude: ['/node_modules/']
       },
       {
         test: /\.css$/i,

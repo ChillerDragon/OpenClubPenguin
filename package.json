@@ -20,7 +20,8 @@
     "webpack-cli": "^5.0.1"
   },
   "scripts": {
-    "server": "webpack build && tsc && node dist/server/server/server.js",
+    "build": "webpack build && tsc --build tsconfig.server.json",
+    "server": "webpack build && tsc --build tsconfig.server.json && node dist/server/server.js",
     "client_build": "webpack --mode=production --node-env=production",
     "client_build:dev": "webpack --mode=development",
     "client_build:prod": "webpack --mode=production --node-env=production",
