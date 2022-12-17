@@ -17,6 +17,6 @@ RUN npx webpack build
 RUN npx tsc
 
 # run backend / serve frontend
-CMD [ "node", "dist/server/index.js" ]
+CMD [ "node", "dist/server/server/server.js" ]
 
 EXPOSE 6827

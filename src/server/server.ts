@@ -5,7 +5,7 @@ const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const path = require('path')
 
-import GameController from './src/server/controller/game_controller'
+import GameController from './controller/game_controller'
 
 const gameController = new GameController()
 
