@@ -1,9 +1,9 @@
-import express = require('express')
+import express from 'express'
 import { Socket } from 'socket.io'
+import { ClientToServerEvents, ServerToClientEvents } from '../shared/socket.io'
 const app = express()
 const http = require('http').Server(app)
-const io = require('socket.io')(http)
-const path = require('path')
+const io: Socket<ClientToServerEvents, ServerToClientEvents> = require('socket.io')(http)
 
 import GameController from './controller/game_controller'
 
