@@ -5,7 +5,7 @@
     "compilerOptions": {
         "lib": ["es2021", "DOM"],
         "module": "commonjs",
-	"outDir": "dist",
+	"outDir": "dist/server",
         "target": "es2021",
         "strict": true,
         "esModuleInterop": true,

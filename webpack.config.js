@@ -11,7 +11,7 @@ const stylesHandler = 'style-loader'
 const config = {
   entry: './src/client/client.ts',
   output: {
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist/client')
   },
   plugins: [
     new HtmlWebpackPlugin({

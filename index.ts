@@ -29,7 +29,7 @@ io.on('connection', (socket: Socket) => {
   })
 })
 
-app.use(express.static('dist'))
+app.use(express.static('dist/client'))
 
 http.listen(6827, () => {
   console.log('[*] listening on http://localhost:6827')

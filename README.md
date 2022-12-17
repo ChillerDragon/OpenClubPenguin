@@ -4,8 +4,19 @@ Henlo disney pls no sue me thank
 
 ## Quickstart
 
+        git clone https://github.com/ChillerDragon/OpenClubPenguin
+        cd OpenClubPenguin
+
         npm install
         npm run server
+
+## Dogger
+
+        git clone https://github.com/ChillerDragon/OpenClubPenguin
+        cd OpenClubPenguin
+
+        docker build -t ocp .
+        docker run -d -p 6827:6827 -t ocp
 
 ## Wot is dis?
 
