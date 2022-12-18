@@ -9,6 +9,7 @@ import PlayerInfo from '../../shared/messages/server/playerinfo'
 import MsgUpdate from '../../shared/messages/server/update'
 import PlayerPos from '../../shared/playerpos'
 import Player from './player'
+import GameClient from './game_client'
 
 interface PlayerIdHash {
   [index: number]: Player
@@ -16,6 +17,8 @@ interface PlayerIdHash {
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io()
 const context = document.querySelector('canvas')!.getContext('2d')
+
+const gameClient = new GameClient(socket)
 
 const players: PlayerIdHash = {}
 let ownId: number | null = null
