@@ -9,7 +9,7 @@ const io: Socket<ClientToServerEvents, ServerToClientEvents> = require('socket.i
 
 const gameController = new GameController()
 
-io.on('connection', (socket: Socket): void => {
+io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>): void => {
   const ipAddr = socket.client.conn.remoteAddress
   const userAgent = socket.handshake.headers['user-agent']
   console.log(`[*] connect ${ipAddr} ${userAgent}`)
