@@ -9,29 +9,29 @@ const io: Socket<ClientToServerEvents, ServerToClientEvents> = require('socket.i
 
 const gameController = new GameController()
 
-io.on('connection', (socket: Socket) => {
+io.on('connection', (socket: Socket): void => {
   const ipAddr = socket.client.conn.remoteAddress
   const userAgent = socket.handshake.headers['user-agent']
   console.log(`[*] connect ${ipAddr} ${userAgent}`)
   gameController.onJoin(socket)
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', (): void => {
     console.log(`[*] disconnect ${ipAddr} ${userAgent}`)
     gameController.onLeave(socket)
   })
 
-  socket.on('move', (dir: string) => {
+  socket.on('move', (dir: string): void => {
     gameController.onMove(socket, dir)
   })
 
-  socket.on('username', (name: string) => {
+  socket.on('username', (name: string): void => {
     gameController.onUsername(socket, name)
   })
 })
 
 app.use(express.static('dist/client'))
 
-http.listen(6827, () => {
+http.listen(6827, (): void => {
   console.log('[*] listening on http://localhost:6827')
 })
 

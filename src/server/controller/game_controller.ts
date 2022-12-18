@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io'
 import Player from '../models/player'
 import World from '../models/world'
-import Pos from '../../shared/pos'
 import PlayerInfo from '../../shared/messages/server/playerinfo'
 import PlayerPos from '../../shared/playerpos'
 import MsgUpdate from '../../shared/messages/server/update'
@@ -16,7 +15,7 @@ class GameController {
   currentPlayerId: number = 0
   world: World = new World(1024, 1024)
 
-  tick (_this: GameController) {
+  tick (_this: GameController): void {
     // console.log(`[controller] game tick players=${Object.keys(_this.players).length}`)
     // build pos data
     const positions: PlayerPos[] = []
@@ -38,7 +37,7 @@ class GameController {
     }
   }
 
-  onJoin (socket: Socket) {
+  onJoin (socket: Socket): void {
     this.currentPlayerId += 1
     const player = new Player(socket, this.currentPlayerId)
     console.log(`[controller] id=${player.id} joined`)
@@ -54,7 +53,7 @@ class GameController {
     this.sendPlayerInfo(socket)
   }
 
-  onLeave (socket: Socket) {
+  onLeave (socket: Socket): void {
     console.log(`[controller] id=${this.players[socket.id].id} left`)
     delete this.players[socket.id]
   }
@@ -69,13 +68,13 @@ class GameController {
     return playerData
   }
 
-  sendPlayerInfo (socket: Socket) {
+  sendPlayerInfo (socket: Socket): void {
     const playerInfos = this.buildPlayerInfo()
     console.log(`[controller] send to=${socket.id} infos=${playerInfos}`)
     socket.emit('playerinfos', playerInfos)
   }
 
-  sendPlayerInfoAll () {
+  sendPlayerInfoAll (): void {
     // send pos data to all clients
     for (const playerId in this.players) {
       const player = this.players[playerId]
@@ -83,7 +82,7 @@ class GameController {
     }
   }
 
-  onUsername (socket: Socket, name: string) {
+  onUsername (socket: Socket, name: string): void {
     const player = this.players[socket.id]
     name = name.slice(0, 32)
     name = name.replace(/[^a-zA-Z0-9]/g, '_')
@@ -92,7 +91,7 @@ class GameController {
     this.sendPlayerInfoAll()
   }
 
-  onMove (socket: Socket, dir: string) {
+  onMove (socket: Socket, dir: string): void {
     const player = this.players[socket.id]
     // console.log(`[controller] id=${player.id} moved '${dir}'`)
     const moveSpeed: number = 10
