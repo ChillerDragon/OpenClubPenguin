@@ -4,6 +4,6 @@
         "./src/client/*"
     ],
     "compilerOptions": {
-        "outDir": "dist/server",
+        "outDir": "dist",
     }
 }

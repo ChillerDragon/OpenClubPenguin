@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "webpack build && tsc --build tsconfig.server.json",
-    "server": "webpack build && tsc --build tsconfig.server.json && node dist/server/server/server.js",
+    "server": "webpack build && tsc --build tsconfig.server.json && node dist/server/server.js",
     "client_build": "webpack --mode=production --node-env=production",
     "client_build:dev": "webpack --mode=development",
     "client_build:prod": "webpack --mode=production --node-env=production",
