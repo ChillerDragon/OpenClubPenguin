@@ -1,13 +1,10 @@
-import { Socket } from 'socket.io'
 import PlayerBase from '../../shared/player_base'
 
 class Player extends PlayerBase {
-    socket: Socket
-
-    constructor(socket: Socket, id: number) {
+    constructor(id: number, username: string) {
         super(id)
 
-        this.socket = socket
+        this.username = username
     }
 }
 

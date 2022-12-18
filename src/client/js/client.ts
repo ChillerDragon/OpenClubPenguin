@@ -8,27 +8,18 @@ import { ServerToClientEvents, ClientToServerEvents } from "../../shared/socket.
 import PlayerInfo from "../../shared/messages/server/playerinfo";
 import MsgUpdate from "../../shared/messages/server/update";
 import PlayerPos from "../../shared/playerpos";
+import Player from "./player";
 
-interface SimplePlayer {
-  x: number
-  y: number
-  username: string
-}
-
-interface PlayerPosList {
-  [index: number]: SimplePlayer
-}
-
-interface UpdateData {
-  positions: PlayerPosList
+interface PlayerIdHash {
+  [index: number]: Player
 }
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 const context = document.querySelector('canvas')!.getContext('2d');
 
-const players: PlayerPosList = {}
+const players: PlayerIdHash = {}
 let ownId: number | null = null
-let ownPlayer: SimplePlayer = {x: 0, y: 0, username: ''}
+let ownPlayer: Player = new Player(0, '')
 let worldHeight = 10
 let worldWidth = 10
 
@@ -37,18 +28,18 @@ let platforms: Array<Platform> = []
 const playerImg = new Image()
 playerImg.src = '/img/penguin.svg'
 
-const centerAroundPos = (pos: Pos) => {
+const centerAroundPos = (pos: Pos): Pos => {
   if (!pos) {
     return {x: 0, y: 0}
   }
-  var wc = context!.canvas.width / 2
-  var hc = context!.canvas.height / 2
-  var x = -pos.x + wc
-  var y = -pos.y + hc
+  const wc = context!.canvas.width / 2
+  const hc = context!.canvas.height / 2
+  const x = -pos.x + wc
+  const y = -pos.y + hc
   return {x: x, y: y}
 }
 
-socket.on('connect', function() {
+socket.on('connect', () => {
   console.log('Successfully connected!');
 })
 
@@ -60,12 +51,12 @@ socket.on('startinfo', (startinfo: StartInfo) => {
 })
 
 socket.on('playerinfos', (playerInfos: Array<PlayerInfo>) => {
-  for(var i = 0; i < playerInfos.length; i++) {
-    var info = playerInfos[i]
+  for(let i = 0; i < playerInfos.length; i++) {
+    const info = playerInfos[i]
     if (players[info.id]) { // update player
       players[info.id].username = info.username
     } else { // new player
-      players[info.id] = {x: 0, y: 0, username: info.username }
+      players[info.id] = new Player(info.id, info.username)
     }
   }
 })
@@ -73,12 +64,11 @@ socket.on('playerinfos', (playerInfos: Array<PlayerInfo>) => {
 socket.on('update', (updateData: MsgUpdate) => {
   const newPositions: Array<PlayerPos> = updateData.positions
   for (const newPos of newPositions) {
-    if (players[newPos.id]) { // update player
-      players[newPos.id].x = newPos.x
-      players[newPos.id].y = newPos.y
-    } else { // new player
-      players[newPos.id] = {x: newPos.x, y: newPos.y, username: ''}
+    if (!players[newPos.id]) {
+      players[newPos.id] = new Player(newPos.id, '')
     }
+    players[newPos.id].x = newPos.x
+    players[newPos.id].y = newPos.y
   }
   // fill background
   context!.fillStyle = 'blue';
@@ -88,13 +78,13 @@ socket.on('update', (updateData: MsgUpdate) => {
   if (ownId) {
     ownPlayer = players[ownId]
   }
-  var offset = centerAroundPos(ownPlayer)
+  const offset = centerAroundPos(ownPlayer)
 
   // draw world
   if (platforms) {
     context!.fillStyle = 'white';
-    for(var i = 0; i < platforms.length; i++) {
-      var plat = platforms[i]
+    for(let i = 0; i < platforms.length; i++) {
+      const plat = platforms[i]
       context!.fillRect(plat.x + offset.x, plat.y + offset.y, plat.w, plat.h);
     }
   }
@@ -102,7 +92,7 @@ socket.on('update', (updateData: MsgUpdate) => {
   // draw players
   context!.fillStyle = 'black';
   for (const newPos of newPositions) {
-    var player = players[newPos.id]
+    const player = players[newPos.id]
     player.x = newPos.x
     player.y = newPos.y
     context!.drawImage(playerImg, player.x + offset.x, player.y + offset.y, 64, 64)
@@ -111,8 +101,8 @@ socket.on('update', (updateData: MsgUpdate) => {
   }
 });
 
-function keyPress(event: KeyboardEvent) {
-  var key = event.key
+const keyPress = (event: KeyboardEvent) => {
+  const key = event.key
   if(key === 'a') {
     socket.emit('move', 'left')
   }
@@ -127,9 +117,9 @@ function keyPress(event: KeyboardEvent) {
   }
 }
 
-window.addEventListener('keydown', keyPress);
+window.addEventListener('keydown', keyPress)
 
-function resize() {
+const resize = () => {
   context!.canvas.height = document.documentElement.clientHeight
   context!.canvas.width = document.documentElement.clientWidth
 }
@@ -137,9 +127,9 @@ function resize() {
 window.addEventListener('resize', resize)
 resize()
 
-var form = document.querySelector('form')
-var usernameBox: HTMLInputElement | null = document.querySelector('#username')
-var usernameContainer = document.querySelector('.username-container')
+const form = document.querySelector('form')
+const usernameBox: HTMLInputElement | null = document.querySelector('#username')
+// const usernameContainer = document.querySelector('.username-container')
 form!.addEventListener('submit', function(event) {
   event.preventDefault()
   socket.emit('username', usernameBox!.value)
