@@ -1,11 +1,11 @@
 import express from 'express'
 import { Socket } from 'socket.io'
 import { ClientToServerEvents, ServerToClientEvents } from '../shared/socket.io'
+
+import GameController from './controller/game_controller'
 const app = express()
 const http = require('http').Server(app)
 const io: Socket<ClientToServerEvents, ServerToClientEvents> = require('socket.io')(http)
-
-import GameController from './controller/game_controller'
 
 const gameController = new GameController()
 

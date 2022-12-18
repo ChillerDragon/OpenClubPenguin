@@ -1,10 +1,10 @@
-import { Socket } from "socket.io"
-import Player from "../models/player"
-import World from "../models/world"
-import Pos from "../../shared/pos"
-import PlayerInfo from "../../shared/messages/server/playerinfo"
-import PlayerPos from "../../shared/playerpos"
-import MsgUpdate from "../../shared/messages/server/update"
+import { Socket } from 'socket.io'
+import Player from '../models/player'
+import World from '../models/world'
+import Pos from '../../shared/pos'
+import PlayerInfo from '../../shared/messages/server/playerinfo'
+import PlayerPos from '../../shared/playerpos'
+import MsgUpdate from '../../shared/messages/server/update'
 
 interface PlayerList {
   [index: string]: Player
@@ -19,7 +19,7 @@ class GameController {
   tick (_this: GameController) {
     // console.log(`[controller] game tick players=${Object.keys(_this.players).length}`)
     // build pos data
-    const positions: Array<PlayerPos> = []
+    const positions: PlayerPos[] = []
     for (const playerId in _this.players) {
       const player = _this.players[playerId]
       positions.push({
@@ -30,7 +30,7 @@ class GameController {
     }
     // send pos data to all clients
     const msgUpdate: MsgUpdate = {
-      positions: positions
+      positions
     }
     for (const playerId in _this.players) {
       const player = _this.players[playerId]
@@ -59,12 +59,12 @@ class GameController {
     delete this.players[socket.id]
   }
 
-  buildPlayerInfo (): Array<PlayerInfo> {
+  buildPlayerInfo (): PlayerInfo[] {
     // build username data
-    const playerData: Array<PlayerInfo> = []
+    const playerData: PlayerInfo[] = []
     for (const playerId in this.players) {
       const player = this.players[playerId]
-      playerData.push({id: player.id, username: player.username})
+      playerData.push({ id: player.id, username: player.username })
     }
     return playerData
   }
