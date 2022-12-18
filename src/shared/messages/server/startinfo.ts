@@ -1,11 +1,11 @@
-import Platform from "../../platform"
+import Platform from '../../platform'
 
 interface StartInfo {
-  clientId: number,
+  clientId: number
   world: {
-    w: number,
-    h: number,
-    platforms: Array<Platform>
+    w: number
+    h: number
+    platforms: Platform[]
   }
 }
 

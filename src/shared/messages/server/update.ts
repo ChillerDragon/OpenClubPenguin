@@ -1,8 +1,7 @@
-import PlayerPos from "../../playerpos"
+import PlayerPos from '../../playerpos'
 
 interface MsgUpdate {
-    positions: Array<PlayerPos>
+  positions: PlayerPos[]
 }
 
 export default MsgUpdate
-
