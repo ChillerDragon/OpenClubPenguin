@@ -1,9 +1,10 @@
+import Platform from '../../shared/platform'
 import randomNumber from '../math'
 
 class World {
   width: number
   height: number
-  platforms: object[]
+  platforms: Platform[]
 
   constructor (width: number, height: number) {
     this.width = width

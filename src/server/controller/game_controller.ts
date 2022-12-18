@@ -4,6 +4,7 @@ import World from '../models/world'
 import PlayerInfo from '../../shared/messages/server/playerinfo'
 import PlayerPos from '../../shared/playerpos'
 import MsgUpdate from '../../shared/messages/server/update'
+import { ClientToServerEvents, ServerToClientEvents } from '../../shared/socket.io'
 
 interface PlayerList {
   [index: string]: Player
@@ -37,7 +38,7 @@ class GameController {
     }
   }
 
-  onJoin (socket: Socket): void {
+  onJoin (socket: Socket<ClientToServerEvents, ServerToClientEvents>): void {
     this.currentPlayerId += 1
     const player = new Player(socket, this.currentPlayerId)
     console.log(`[controller] id=${player.id} joined`)
@@ -53,7 +54,7 @@ class GameController {
     this.sendPlayerInfo(socket)
   }
 
-  onLeave (socket: Socket): void {
+  onLeave (socket: Socket<ClientToServerEvents, ServerToClientEvents>): void {
     console.log(`[controller] id=${this.players[socket.id].id} left`)
     delete this.players[socket.id]
   }
@@ -68,7 +69,7 @@ class GameController {
     return playerData
   }
 
-  sendPlayerInfo (socket: Socket): void {
+  sendPlayerInfo (socket: Socket<ClientToServerEvents, ServerToClientEvents>): void {
     const playerInfos = this.buildPlayerInfo()
     console.log(`[controller] send to=${socket.id} infos=${playerInfos}`)
     socket.emit('playerinfos', playerInfos)
@@ -82,7 +83,7 @@ class GameController {
     }
   }
 
-  onUsername (socket: Socket, name: string): void {
+  onUsername (socket: Socket<ClientToServerEvents, ServerToClientEvents>, name: string): void {
     const player = this.players[socket.id]
     name = name.slice(0, 32)
     name = name.replace(/[^a-zA-Z0-9]/g, '_')
@@ -91,7 +92,7 @@ class GameController {
     this.sendPlayerInfoAll()
   }
 
-  onMove (socket: Socket, dir: string): void {
+  onMove (socket: Socket<ClientToServerEvents, ServerToClientEvents>, dir: string): void {
     const player = this.players[socket.id]
     // console.log(`[controller] id=${player.id} moved '${dir}'`)
     const moveSpeed: number = 10
