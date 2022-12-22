@@ -7,6 +7,7 @@ import PlayerInfo from '../../shared/messages/server/playerinfo'
 import MsgUpdate from '../../shared/messages/server/update'
 import PlayerPos from '../../shared/playerpos'
 import Render from './render'
+import InputHandler from './input_handler'
 
 export interface PlayerIdHash {
   [index: number]: Player
@@ -21,10 +22,12 @@ class GameClient {
   players: PlayerIdHash = {}
   ownPlayer: Player = new Player(0, '')
   render: Render
+  inputHandler: InputHandler
 
-  constructor (socket: Socket<ServerToClientEvents, ClientToServerEvents>) {
+  constructor (socket: Socket<ServerToClientEvents, ClientToServerEvents>, inputHandler: InputHandler) {
     this.socket = socket
     this.render = new Render()
+    this.inputHandler = inputHandler
   }
 
   onJoin (): void {
@@ -49,6 +52,16 @@ class GameClient {
     }
   }
 
+  renderTick (): void {
+    this.render.setCameraToPlayer(this.ownPlayer)
+    this.render.drawBackground()
+    this.render.drawWorld(this.platforms)
+    this.render.drawPlayers(this.players)
+
+    // logic/physic tick should not depend on frame rate
+    this.inputHandler.doActions()
+  }
+
   onUpdate (updateData: MsgUpdate): void {
     const newPositions: PlayerPos[] = updateData.positions
     for (const newPos of newPositions) {
@@ -66,11 +79,6 @@ class GameClient {
       player.x = newPos.x
       player.y = newPos.y
     }
-
-    this.render.setCameraToPlayer(this.ownPlayer)
-    this.render.drawBackground()
-    this.render.drawWorld(this.platforms)
-    this.render.drawPlayers(this.players)
   }
 }
 

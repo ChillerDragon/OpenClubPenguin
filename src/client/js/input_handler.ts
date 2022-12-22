@@ -1,30 +1,31 @@
 import Direction from '../../shared/direction'
-import GameClient from './game_client'
+import { Socket } from 'socket.io-client'
+import { ServerToClientEvents, ClientToServerEvents } from '../../shared/socket.io'
 
 interface KeyMap {
   [index: string]: boolean | null
 }
 
 class InputHandler {
-  gameClient: GameClient
+  socket: Socket<ServerToClientEvents, ClientToServerEvents>
   keyMap: KeyMap = {}
 
-  constructor (gameClient: GameClient) {
-    this.gameClient = gameClient
+  constructor (socket: Socket<ServerToClientEvents, ClientToServerEvents>) {
+    this.socket = socket
   }
 
   doActions (): void {
     if (this.keyMap['a']) {
-      this.gameClient.socket.emit('move', Direction.Left)
+      this.socket.emit('move', Direction.Left)
     }
     if (this.keyMap['d']) {
-      this.gameClient.socket.emit('move', Direction.Right)
+      this.socket.emit('move', Direction.Right)
     }
     if (this.keyMap['w']) {
-      this.gameClient.socket.emit('move', Direction.Up)
+      this.socket.emit('move', Direction.Up)
     }
     if (this.keyMap['s']) {
-      this.gameClient.socket.emit('move', Direction.Down)
+      this.socket.emit('move', Direction.Down)
     }
   }
 

@@ -11,8 +11,8 @@ import InputHandler from './input_handler'
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io()
 const context = document.querySelector('canvas')!.getContext('2d')
 
-const gameClient = new GameClient(socket)
-const inputHandler = new InputHandler(gameClient)
+const inputHandler = new InputHandler(socket)
+const gameClient = new GameClient(socket, inputHandler)
 
 socket.on('connect', () => {
   gameClient.onJoin()
@@ -50,6 +50,12 @@ window.addEventListener('wheel', (event: WheelEvent) => {
     gameClient.render.zoomOut()
   }
 })
+
+const renderTick = () => {
+  gameClient.renderTick()
+  window.requestAnimationFrame(renderTick)
+}
+window.requestAnimationFrame(renderTick)
 
 window.addEventListener('resize', resize)
 resize()
