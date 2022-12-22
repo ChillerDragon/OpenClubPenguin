@@ -14,31 +14,42 @@ class InputHandler {
     this.socket = socket
   }
 
-  doActions (): void {
-    if (this.keyMap['a']) {
-      this.socket.emit('move', Direction.Left)
+  getDirection (): Direction {
+    if (this.keyMap.w && this.keyMap.a) {
+      return Direction.UpLeft
     }
-    if (this.keyMap['d']) {
-      this.socket.emit('move', Direction.Right)
+    if (this.keyMap.w && this.keyMap.d) {
+      return Direction.UpRight
     }
-    if (this.keyMap['w']) {
-      this.socket.emit('move', Direction.Up)
+    if (this.keyMap.s && this.keyMap.a) {
+      return Direction.DownLeft
     }
-    if (this.keyMap['s']) {
-      this.socket.emit('move', Direction.Down)
+    if (this.keyMap.s && this.keyMap.d) {
+      return Direction.DownRight
     }
+    if (this.keyMap.w) {
+      return Direction.Up
+    }
+    if (this.keyMap.s) {
+      return Direction.Down
+    }
+    if (this.keyMap.a) {
+      return Direction.Left
+    }
+    if (this.keyMap.d) {
+      return Direction.Right
+    }
+    return Direction.Stop
   }
 
   onKeyPress (_this: InputHandler, event: KeyboardEvent): void {
     const key = event.key
     _this.keyMap[key] = true
-    _this.doActions()
   }
 
   onKeyRelease (_this: InputHandler, event: KeyboardEvent): void {
     const key = event.key
     _this.keyMap[key] = false
-    _this.doActions()
   }
 }
 

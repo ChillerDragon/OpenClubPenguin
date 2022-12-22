@@ -15,14 +15,54 @@ class GameController {
   pos: number = 0
   players: PlayerList = {}
   currentPlayerId: number = 0
-  world: World = new World(1024, 1024)
+  world: World = new World(3000, 3000)
 
   tick (_this: GameController): void {
     // console.log(`[controller] game tick players=${Object.keys(_this.players).length}`)
+    // update positions
+    for (const playerId in _this.players) {
+      const player: Player = _this.players[playerId]
+      const dir: Direction = player.direction
+      const moveSpeed: number = 4
+      if (dir === Direction.Left) {
+        player.x -= moveSpeed
+      } else if (dir === Direction.Right) {
+        player.x += moveSpeed
+      } else if (dir === Direction.Up) {
+        player.y -= moveSpeed
+      } else if (dir === Direction.Down) {
+        player.y += moveSpeed
+      } else if (dir === Direction.UpLeft) {
+        player.x -= moveSpeed
+        player.y -= moveSpeed
+      } else if (dir === Direction.UpRight) {
+        player.x += moveSpeed
+        player.y -= moveSpeed
+      } else if (dir === Direction.DownLeft) {
+        player.x -= moveSpeed
+        player.y += moveSpeed
+      } else if (dir === Direction.DownRight) {
+        player.x += moveSpeed
+        player.y += moveSpeed
+      }
+      // TODO: better clamping
+      if (player.x > _this.world.width) {
+        player.x = _this.world.width
+      }
+      if (player.x < 0) {
+        player.x = 0
+      }
+      if (player.y > _this.world.height) {
+        player.y = _this.world.height
+      }
+      if (player.y < 0) {
+        player.y = 0
+      }
+    }
     // build pos data
     const positions: PlayerPos[] = []
     for (const playerId in _this.players) {
-      const player = _this.players[playerId]
+      const player: Player = _this.players[playerId]
       positions.push({
         id: player.id,
         x: player.x,
@@ -93,35 +133,14 @@ class GameController {
     this.sendPlayerInfoAll()
   }
 
-  onMove (socket: Socket<ClientToServerEvents, ServerToClientEvents>, dir: string): void {
+  onMove (socket: Socket<ClientToServerEvents, ServerToClientEvents>, dir: Direction): void {
     const player = this.players[socket.id]
-    // console.log(`[controller] id=${player.id} moved '${dir}'`)
-    const moveSpeed: number = 2
-    if (dir === Direction.Left) {
-      player.x -= moveSpeed
-    } else if (dir === Direction.Right) {
-      player.x += moveSpeed
-    } else if (dir === Direction.Up) {
-      player.y -= moveSpeed
-    } else if (dir === Direction.Down) {
-      player.y += moveSpeed
-    } else {
-      console.log(`[controller] illegal direction '${dir}'`)
+    if (!Object.keys(Direction).includes(dir)) {
+      console.log(`[controller] illegal direction '${dir}' allowed: ${Object.keys(Direction)}`)
+      return
     }
-
-    // TODO: better clamping
-    if (player.x > this.world.width) {
-      player.x = this.world.width
-    }
-    if (player.x < 0) {
-      player.x = 0
-    }
-    if (player.y > this.world.height) {
-      player.y = this.world.height
-    }
-    if (player.y < 0) {
-      player.y = 0
-    }
+    player.direction = dir
+    console.log(`[controller] id=${player.id} moved '${dir}'`)
   }
 }
 

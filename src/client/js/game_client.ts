@@ -8,6 +8,7 @@ import MsgUpdate from '../../shared/messages/server/update'
 import PlayerPos from '../../shared/playerpos'
 import Render from './render'
 import InputHandler from './input_handler'
+import Direction from '../../shared/direction'
 
 export interface PlayerIdHash {
   [index: number]: Player
@@ -57,9 +58,14 @@ class GameClient {
     this.render.drawBackground()
     this.render.drawWorld(this.platforms)
     this.render.drawPlayers(this.players)
+  }
 
-    // logic/physic tick should not depend on frame rate
-    this.inputHandler.doActions()
+  onInput (): void {
+    const dir: Direction = this.inputHandler.getDirection()
+    if (this.ownPlayer.direction !== dir) {
+      this.ownPlayer.direction = dir
+      this.socket.emit('move', this.ownPlayer.direction)
+    }
   }
 
   onUpdate (updateData: MsgUpdate): void {

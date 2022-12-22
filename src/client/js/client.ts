@@ -37,10 +37,12 @@ const resize = () => {
 
 window.addEventListener('keydown', (event: KeyboardEvent) => {
   inputHandler.onKeyPress(inputHandler, event)
+  gameClient.onInput()
 })
 
 window.addEventListener('keyup', (event: KeyboardEvent) => {
   inputHandler.onKeyRelease(inputHandler, event)
+  gameClient.onInput()
 })
 
 window.addEventListener('wheel', (event: WheelEvent) => {

@@ -19,8 +19,8 @@ class World {
       const plat = {
         x: randomNumber(0, this.width),
         y: randomNumber(0, this.height),
-        w: randomNumber(1, 500),
-        h: randomNumber(1, 500)
+        w: randomNumber(100, 1000),
+        h: randomNumber(100, 1000)
       }
       this.platforms.push(plat)
     }

@@ -1,5 +1,6 @@
 import express from 'express'
 import { Socket } from 'socket.io'
+import Direction from '../shared/direction'
 import { ClientToServerEvents, ServerToClientEvents } from '../shared/socket.io'
 
 import GameController from './controller/game_controller'
@@ -20,7 +21,7 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>)
     gameController.onLeave(socket)
   })
 
-  socket.on('move', (dir: string): void => {
+  socket.on('move', (dir: Direction): void => {
     gameController.onMove(socket, dir)
   })
 
@@ -35,4 +36,4 @@ http.listen(6827, (): void => {
   console.log('[*] listening on http://localhost:6827')
 })
 
-setInterval(gameController.tick, 100, gameController)
+setInterval(gameController.tick, 10, gameController)
