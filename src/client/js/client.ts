@@ -39,6 +39,10 @@ window.addEventListener('keydown', (event: KeyboardEvent) => {
   inputHandler.onKeyPress(inputHandler, event)
 })
 
+window.addEventListener('keyup', (event: KeyboardEvent) => {
+  inputHandler.onKeyRelease(inputHandler, event)
+})
+
 window.addEventListener('wheel', (event: WheelEvent) => {
   if (event.deltaY < 0) { // up (unnatural scroll: move view not content)
     gameClient.render.zoomIn()
