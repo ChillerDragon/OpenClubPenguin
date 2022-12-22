@@ -3,6 +3,8 @@ class PlayerBase {
   username: string
   x: number
   y: number
+  w: number = 64
+  h: number = 64
 
   constructor (id: number) {
     this.id = id

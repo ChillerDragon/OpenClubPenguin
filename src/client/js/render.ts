@@ -26,8 +26,8 @@ class Render {
     }
     const wc = w / 2
     const hc = h / 2
-    const x = -pos.x + wc
-    const y = -pos.y + hc
+    const x = -pos.x + wc / this.camera.zoom
+    const y = -pos.y + hc / this.camera.zoom
     return { x, y }
   }
 
@@ -42,8 +42,8 @@ class Render {
       for (let i = 0; i < platforms.length; i++) {
         const plat = platforms[i]
         this.context!.fillRect(
-          plat.x * this.camera.zoom + this.camera.x,
-          plat.y * this.camera.zoom + this.camera.y,
+          (plat.x + this.camera.x) * this.camera.zoom,
+          (plat.y + this.camera.y) * this.camera.zoom,
           plat.w * this.camera.zoom,
           plat.h * this.camera.zoom)
       }
@@ -57,14 +57,14 @@ class Render {
       const player = players[playerId]
       this.context!.drawImage(
         this.playerImg,
-        player.x * this.camera.zoom + this.camera.x,
-        player.y * this.camera.zoom + this.camera.y,
-        64 * this.camera.zoom,
-        64 * this.camera.zoom)
+        (player.x + this.camera.x) * this.camera.zoom,
+        (player.y + this.camera.y) * this.camera.zoom,
+        player.w * this.camera.zoom,
+        player.h * this.camera.zoom)
       this.context!.fillText(
         player.username,
-        player.x * this.camera.zoom + this.camera.x + 32,
-        player.y * this.camera.zoom + this.camera.y - 10)
+        (player.x + this.camera.x + 32) * this.camera.zoom,
+        (player.y + this.camera.y - 10) * this.camera.zoom)
     }
   }
 
@@ -78,8 +78,8 @@ class Render {
 
   setCameraToPlayer (player: Player): void {
     const offset = this.centerAroundPos(player, this.context!.canvas.width, this.context!.canvas.height)
-    this.camera.x = offset.x
-    this.camera.y = offset.y
+    this.camera.x = offset.x - (player.w / 2)
+    this.camera.y = offset.y - (player.h / 2)
   }
 }
 
