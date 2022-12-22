@@ -5,6 +5,7 @@ import PlayerInfo from '../../shared/messages/server/playerinfo'
 import PlayerPos from '../../shared/playerpos'
 import MsgUpdate from '../../shared/messages/server/update'
 import { ClientToServerEvents, ServerToClientEvents } from '../../shared/socket.io'
+import Direction from '../../shared/direction'
 
 interface PlayerList {
   [index: string]: Player
@@ -96,13 +97,13 @@ class GameController {
     const player = this.players[socket.id]
     // console.log(`[controller] id=${player.id} moved '${dir}'`)
     const moveSpeed: number = 10
-    if (dir === 'left') {
+    if (dir === Direction.Left) {
       player.x -= moveSpeed
-    } else if (dir === 'right') {
+    } else if (dir === Direction.Right) {
       player.x += moveSpeed
-    } else if (dir === 'up') {
+    } else if (dir === Direction.Up) {
       player.y -= moveSpeed
-    } else if (dir === 'down') {
+    } else if (dir === Direction.Down) {
       player.y += moveSpeed
     } else {
       console.log(`[controller] illegal direction '${dir}'`)

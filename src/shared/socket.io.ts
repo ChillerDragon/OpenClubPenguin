@@ -2,6 +2,7 @@ import StartInfo from './messages/server/startinfo'
 import PlayerInfo from './messages/server/playerinfo'
 import MsgUpdate from './messages/server/update'
 import { Socket } from 'socket.io'
+import Direction from './direction'
 
 export interface ServerToClientEvents {
   // ocp
@@ -15,6 +16,6 @@ export interface ClientToServerEvents {
   connection: (socket: Socket) => void
 
   // ocp
-  move: (direction: string) => void
+  move: (direction: Direction) => void
   username: (name: string) => void
 }
