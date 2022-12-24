@@ -9,6 +9,7 @@ import PlayerPos from '../../shared/playerpos'
 import Render from './render'
 import InputHandler from './input_handler'
 import Direction from '../../shared/direction'
+import UserInterface from './user_interface'
 
 export interface PlayerIdHash {
   [index: number]: Player
@@ -24,11 +25,13 @@ class GameClient {
   ownPlayer: Player = new Player(0, '')
   render: Render
   inputHandler: InputHandler
+  userInterface: UserInterface
 
   constructor (socket: Socket<ServerToClientEvents, ClientToServerEvents>, inputHandler: InputHandler) {
     this.socket = socket
     this.render = new Render()
     this.inputHandler = inputHandler
+    this.userInterface = new UserInterface(this.render, this.inputHandler)
   }
 
   onJoin (): void {
@@ -58,6 +61,8 @@ class GameClient {
     this.render.drawBackground()
     this.render.drawWorld(this.platforms)
     this.render.drawPlayers(this.players)
+
+    this.userInterface.draw()
   }
 
   onInput (): void {

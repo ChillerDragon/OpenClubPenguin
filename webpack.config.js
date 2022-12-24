@@ -22,7 +22,7 @@ const config = {
       patterns: [
         // TODO: the whole copy plugin is such a hack
         { from: 'src/client/css/style.css', to: 'style.css' },
-        { from: 'src/client/img/penguin.svg', to: 'img/penguin.svg' }
+        { from: 'img/*.svg', to: '.' }
       ]
     })
 

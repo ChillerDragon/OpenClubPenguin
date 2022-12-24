@@ -9,7 +9,8 @@ import GameClient from './game_client'
 import InputHandler from './input_handler'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io()
-const context = document.querySelector('canvas')!.getContext('2d')
+const canvas = document.querySelector('canvas')
+const context = canvas!.getContext('2d')
 
 const inputHandler = new InputHandler(socket)
 const gameClient = new GameClient(socket, inputHandler)
@@ -33,7 +34,12 @@ socket.on('update', (updateData: MsgUpdate) => {
 const resize = () => {
   context!.canvas.height = document.documentElement.clientHeight
   context!.canvas.width = document.documentElement.clientWidth
+  gameClient.userInterface.registerUiElements() // calculate pos based on new size
 }
+
+canvas?.addEventListener('click', (event: MouseEvent) => {
+  gameClient.userInterface.onClick(event)
+})
 
 window.addEventListener('keydown', (event: KeyboardEvent) => {
   inputHandler.onKeyPress(inputHandler, event)
